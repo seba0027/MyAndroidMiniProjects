@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -48,7 +50,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        ImageView myimage = findViewById(R.id.logo_algonquin);
 
+
+
+        ImageButton imgbtn = findViewById( R.id.myimagebutton );
+
+
+
+        imgbtn.setOnClickListener( w  -> {
+            int width = imgbtn.getWidth();
+            int height = imgbtn.getHeight();
+            Toast.makeText(MainActivity.this, "The width = " + width + " and height = " + height + ".", Toast.LENGTH_SHORT).show();
+        });
 
 
     }
