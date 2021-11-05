@@ -3,5 +3,5 @@
     <color name="my_primary">#E20C101E</color>
     <color name="my_secondary">#E20C101E</color>
     <color name="my_statusbar">#000000</color>
-    <color name="my_text">#FF0000</color>
+    <color name="my_text">#000000</color>
 </resources>
