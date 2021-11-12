@@ -85,7 +85,7 @@ public class ChatRoom extends AppCompatActivity {
         public MyRowViews( View itemView) {
             super(itemView);
             itemView.setOnClickListener(click -> {
-                int position = getAdapterPosition();
+                int position = getAbsoluteAdapterPosition();
                 AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
                 builder.setMessage("Do you want to delete the message: " +messageText.getText())
                 .setTitle("Question:")
