@@ -9,9 +9,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,6 +84,25 @@ public class ChatRoom extends AppCompatActivity {
         //Constructor
         public MyRowViews( View itemView) {
             super(itemView);
+            itemView.setOnClickListener(click -> {
+                int position = getAdapterPosition();
+                AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
+                builder.setMessage("Do you want to delete the message: " +messageText.getText())
+                .setTitle("Question:")
+                .setNegativeButton("No", (dialog, cl) ->{})
+                .setPositiveButton("Yes", (dialog, cl) ->{
+                    ChatMessage removedMessage = messages.get(position);
+                    messages.remove(position);
+                    adt.notifyItemRemoved(position);
+                    Snackbar.make(messageText, "You deleted message #" +position,Snackbar.LENGTH_LONG)
+                            .setAction("Undo",clk -> {
+                                messages.add(position, removedMessage);
+                                adt.notifyItemInserted(position);
+                            })
+                            .show();
+                }).create().show();
+            });
+
             messageText = itemView.findViewById(R.id.message);
             timeText = itemView.findViewById(R.id.time);
 
