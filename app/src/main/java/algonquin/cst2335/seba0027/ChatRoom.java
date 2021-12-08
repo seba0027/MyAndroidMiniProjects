@@ -23,6 +23,8 @@ import java.util.Locale;
 
 public class ChatRoom extends AppCompatActivity {
 
+
+    MyOpenHelper opener;
     RecyclerView chatList;
     Button sendBtn;
     Button receiveBtn;
@@ -43,6 +45,10 @@ public class ChatRoom extends AppCompatActivity {
         edit = findViewById(R.id.editText);
         adt = new MyChatAdapter();
         chatList.setAdapter(adt) ;
+
+        // Opening the Database
+        //Initilize it in onCreate(0
+        opener = new MyOpenHelper( this );
 
 
         // send onCLickListener
