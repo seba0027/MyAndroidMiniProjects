@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 
@@ -26,7 +27,7 @@ import java.util.Locale;
 
 public class ChatRoom extends AppCompatActivity {
 
-
+    SQLiteDatabase db;
     MyOpenHelper opener;
     RecyclerView chatList;
     Button sendBtn;
@@ -52,7 +53,7 @@ public class ChatRoom extends AppCompatActivity {
         // Opening the Database
         //Initilize it in onCreate(0
         opener = new MyOpenHelper(this);
-        SQLiteDatabase db = opener.getWritableDatabase();
+        db = opener.getWritableDatabase();
 
         // send onCLickListener
         sendBtn = findViewById(R.id.sendButton);
@@ -142,6 +143,7 @@ public class ChatRoom extends AppCompatActivity {
         //Constructor
         public MyRowViews( View itemView) {
             super(itemView);
+
             itemView.setOnClickListener(click -> {
                 int position = getAbsoluteAdapterPosition();
                 AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
@@ -149,13 +151,25 @@ public class ChatRoom extends AppCompatActivity {
                 .setTitle("Question:")
                 .setNegativeButton("No", (dialog, cl) ->{})
                 .setPositiveButton("Yes", (dialog, cl) ->{
+
+
+
+                   // Removing the messages from the Array List
                     ChatMessage removedMessage = messages.get(position);
                     messages.remove(position);
                     adt.notifyItemRemoved(position);
+
+                    // Deleting from the DB
+
+                    db.delete(MyOpenHelper.TABLE_NAME,"_id=?", new String[] { Long.toString(removedMessage.getId()) });
+
                     Snackbar.make(messageText, "You deleted message #" +position,Snackbar.LENGTH_LONG)
                             .setAction("Undo",clk -> {
                                 messages.add(position, removedMessage);
                                 adt.notifyItemInserted(position);
+
+                                db.execSQL( String.format( " Insert into %s values (\"%d\", \"%s\", \"%d\", \"%s\" );",
+                                        MyOpenHelper.TABLE_NAME      , removedMessage.getId()  , removedMessage.getMessage() , removedMessage.getSendOrReceive()  , removedMessage.getTimeSent()));
                             })
                             .show();
                 }).create().show();
